@@ -10,6 +10,7 @@
 
 # OSX / *nix default autosave extension
 *.m~
+*.autosave
 
 # Compiled MEX binaries (all platforms)
 *.mex*
@@ -34,4 +35,6 @@ slprj/
 *.la
 *.a
 
+# Build files
+build/
 

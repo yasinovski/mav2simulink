@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [2757.0, 350.0, 620.0, 603.0]
+      Location		      [2071.0, 316.0, 458.0, 481.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -28,7 +28,7 @@ Library {
 	DockPosition		"Left"
 	Width			[50]
 	Height			[50]
-	Filter			[8]
+	Filter			[9]
       }
       Object {
 	$PropName		"ExplorerBarInfo"
@@ -43,9 +43,9 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[564.0, 430.0]
+	Extents			[402.0, 308.0]
 	ZoomFactor		[1.0]
-	Offset			[153.0, -87.0]
+	Offset			[104.0, -121.0]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "fede"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Mar 16 14:19:06 2013"
-  RTWModifiedTimeStamp	  285344344
-  ModelVersionFormat	  "1.%<AutoIncrement:37>"
+  LastModifiedDate	  "Fri Jun 14 18:52:34 2013"
+  RTWModifiedTimeStamp	  293136741
+  ModelVersionFormat	  "1.%<AutoIncrement:51>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -690,7 +690,7 @@ Library {
   }
   System {
     Name		    "MAVLink_Block"
-    Location		    [2757, 350, 3377, 953]
+    Location		    [2071, 316, 2529, 797]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -710,100 +710,103 @@ Library {
       Name		      "MAVLink Receiver"
       SID		      "1"
       RequirementInfo	      "{}  %GIDa_9577e822_a5b6_4f25_87af_664d6d653a51"
-      Ports		      [0, 1]
-      Position		      [310, 99, 560, 211]
+      Ports		      [0, 3]
+      Position		      [220, 4, 370, 86]
       ZOrder		      -1
-      FunctionName	      "MAVLink_Interface"
-      Parameters	      "Port_LOCAL,MSG_OUTPUT"
+      FunctionName	      "mav2simulink"
+      Parameters	      "Port, FS, msg_vector"
       EnableBusSupport	      off
       Object {
 	$PropName		"MaskObject"
 	$ObjectID		17
 	$ClassName		"Simulink.Mask"
-	Initialization		"MSG_ID_NUM_OUTPUT = [uint8(31) uint8(30) uint8(105) uint8(250) uint8(102) uint8(254) uint8(32) uint8"
-	"(200)];\nMSG_ID_NAME_OUTPUT = [QUATERNION ATTITUDE_OUT RAW_IMU LINACCEL VISION DEBUG EKF TIMESTAMP];\n\nidx_output = "
-	"find(MSG_ID_NAME_OUTPUT);\nMSG_OUTPUT = MSG_ID_NUM_OUTPUT(idx_output);"
-	Display			"%Label block\nfprintf('MAVLink UDP\\nListening to port %d', Port_LOCAL )\n\n%Label output ports\n\nout = 1"
-	";\nif (QUATERNION == 1)\n    port_label('output', out, 'QUATERNION');\n    out = out + 1;\nend\nif (ATTITUDE_OUT == 1"
-	")\n    port_label('output', out, 'ATTITUDE');\n    out = out + 1;\nend\nif (RAW_IMU == 1)\n    port_label('output', o"
-	"ut, 'RAW IMU');\n    out = out + 1;\nend\nif (LINACCEL == 1)\n    port_label('output', out, 'Debug V');\n    out = ou"
-	"t + 1;\nend\nif (VISION == 1)\n    port_label('output', out, 'PTAM');\n    out = out + 1;\nend\nif (DEBUG == 1)\n    "
-	"port_label('output', out, 'Debug');\n    out = out + 1;\nend\nif (EKF== 1)\n    port_label('output', out, 'IMUpos');\n"
-	"    out = out + 1;\nend\nif (TIMESTAMP == 1)\n    port_label('output', out, 'dt');\n    out = out + 1;\nend\n\n"
+	Type			"UDP Mavlink Reciever Block"
+	Description		"The block will listen to all broadcast that it recieves on the port specified. The only valid messages "
+	"are Mavlink debug vector messages for now, but all sensors from a smartphone can be supported by default. \n\nThe blo"
+	"ck was developed without Real-Time workshop support, so everything is handled sample-based and event-based (see the e"
+	"xample). "
+	Initialization		"msg_vector  = [int32(accel) int32(gyro) int32(magn) int32(vispos) int32(visatt)];\nmsg_strings = {'a"
+	"ccel', 'gyro', 'magn', 'vispos', 'visatt'};"
+	SelfModifiable		"on"
+	Display			"%Label block\nfprintf('MAVLink UDP\\nLocal port: %d', Port )\n\nn = 1;\nfor i = 1:length(msg_vector)\n    "
+	"if msg_vector(i)\n        port_label('output', n, msg_strings{i})\n        n = n + 1;\n    end\nend\n        \n"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  9
+	  Dimension		  8
 	  Object {
 	    $ObjectID		    18
 	    Type		    "edit"
-	    Name		    "Port_LOCAL"
+	    Name		    "Port"
 	    Prompt		    "Local Port"
 	    Value		    "14550"
-	    TabName		    "Setting"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    19
-	    Type		    "checkbox"
-	    Name		    "ATTITUDE_OUT"
-	    Prompt		    "ATTITUDE"
-	    Value		    "off"
-	    TabName		    "Output Message"
+	    Type		    "edit"
+	    Name		    "FS"
+	    Prompt		    "Sample Rate"
+	    Value		    "0.01"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    20
 	    Type		    "checkbox"
-	    Name		    "RAW_IMU"
-	    Prompt		    "RAW IMU"
-	    Value		    "off"
-	    TabName		    "Output Message"
+	    Name		    "accel"
+	    Prompt		    "Accelerometer"
+	    Value		    "on"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    21
 	    Type		    "checkbox"
-	    Name		    "QUATERNION"
-	    Prompt		    "Quaternion"
+	    Name		    "gyro"
+	    Prompt		    "Gyroscope"
 	    Value		    "off"
-	    TabName		    "Output Message"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    22
 	    Type		    "checkbox"
-	    Name		    "TIMESTAMP"
-	    Prompt		    "TIMESTAMP"
+	    Name		    "magn"
+	    Prompt		    "Magnetometer"
 	    Value		    "off"
-	    TabName		    "Output Message"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    23
 	    Type		    "checkbox"
-	    Name		    "LINACCEL"
-	    Prompt		    "Linear Acceleration (Google)"
-	    Value		    "off"
-	    TabName		    "Output Message"
+	    Name		    "vispos"
+	    Prompt		    "Visual position"
+	    Value		    "on"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    24
 	    Type		    "checkbox"
-	    Name		    "VISION"
-	    Prompt		    "Vision Position"
-	    Value		    "off"
-	    TabName		    "Output Message"
+	    Name		    "visatt"
+	    Prompt		    "Visual attitude"
+	    Value		    "on"
+	    Tunable		    "off"
+	    TabName		    "Settings"
 	  }
 	  Object {
 	    $ObjectID		    25
-	    Type		    "checkbox"
-	    Name		    "DEBUG"
-	    Prompt		    "Debug float"
-	    Value		    "off"
-	    TabName		    "Output Message"
-	  }
-	  Object {
-	    $ObjectID		    26
-	    Type		    "checkbox"
-	    Name		    "EKF"
-	    Prompt		    "IMU position estimation"
-	    Value		    "on"
-	    TabName		    "Output Message"
+	    Type		    "edit"
+	    Name		    "msg_vector"
+	    Prompt		    ""
+	    Value		    "0"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	    Enabled		    "off"
+	    Visible		    "off"
+	    TabName		    "Settings"
 	  }
 	  PropName		  "Parameters"
 	}
