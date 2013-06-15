@@ -17,13 +17,13 @@ Adding a new Message
 
 Here we assume we would like to send a custom message from a 3-Axis range sensor. The sensor reads the [x, y, z] values of range at time t. To send the message compatible with this block the message need to be specified as:
 
-mavlink_msg_debug_vect_send(MAVLINK_COMM_X, "range", time, x, y, z);
+    mavlink_msg_debug_vect_send(MAVLINK_COMM_X, "range", time, x, y, z);
 
 Where time is a uint64_t stamp and [x, y,i z] are floats and "range" is an arbitrary string message identifier. On the receiver side, the message would be automatically registered as available in the current buffer exposed to the S-Function wrapper. To access the new sensor data from Simulink, two things need to be modified: 
 
-- 1) The MAVLink_block.mdl: In Simulink, unlock the model, and in the parameter tab add a checkbox parameter with Promt as range , for instance, and same name for its variable. 
+- The MAVLink_block.mdl: In Simulink, unlock the model, and in the parameter tab add a checkbox parameter with Promt as range , for instance, and same name for its variable. 
 
-![ScreenShot](https://www.google.com)
+![ScreenShot](https://raw.github.com/FedeCamposeco/mav2simulink/master/add_parameter.png)
 
 In the initialization tab, augment the msg_vector and msg_strings to include your parameter, so change from:
 
@@ -36,7 +36,7 @@ to
     msg_strings = {'accel', 'gyro', 'magn', 'vispos', 'visatt', 'range'};
  
 
-- 2) The mav2simulink.cpp: Look for the array of strings at the begginign of the file called keys. Add an element to the array, so change from: 
+- The mav2simulink.cpp: Look for the array of strings at the begginign of the file called keys. Add an element to the array, so change from: 
 
 
     static  std::string keys[5] = {"accel", "gyro", "magn", "vispos", "visatt"};
