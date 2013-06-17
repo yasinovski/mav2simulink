@@ -13,7 +13,7 @@
 *.autosave
 
 # Compiled MEX binaries (all platforms)
-*.mex*
+*.mexa*
 
 # Simulink Code Generation	
 slprj/
