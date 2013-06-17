@@ -12,6 +12,27 @@ This block will take UDP messages from a user-specified port that contain Mavlin
 
 So you should send one of the above if you intend to have the messages available in the Simulink block. The reason behind this is that it is non-trivial to modify the Simulink blocks from the C++ S-Function at execution time, so it is in any case impossible to provide an automatic interface as the one in QGroundcontrol and this scheme reduces the complexity of adding more custom messages without having to support every type of mavlink message. 
 
+Installation
+============
+
+Mavlink headers are needed for the compilation of the block. A stripped-down version is included, however, if the latest messages wished to be used, a subgit is provided. If you want to use these latest headers you need to generate them. To do so, from the console:
+
+    git submodule init
+    git submodule update
+    mkdir build && cd build
+    cmake ..
+    make
+
+The block uses boost libraries for UDP communication and multi-threading. To compile the source code for the S-Function block, you will need to use the provided boost libraries with your MATLAB distribution. To do that a matlab script is provided, just run:
+
+    >> autocompile
+
+on the root folder mav2simulink. Another option is to just call the default boost libraries from the system and use the udp_library generated in the "make" command above (which also generate the full Mavlink headers):
+
+    >> mex -Iinclude -lboost_thread -lboost_system -Lbuild -ludp_mavlink mav2simulink.cpp
+
+This gave me problems when linking with the mex-compiled wrapper, since the versions linux and MATLAB libstdc++ are incompatible. 
+
 Adding a new Message
 ===================
 
@@ -46,22 +67,4 @@ to
     static  std::string keys[5] = {"accel", "gyro", "magn", "vispos", "visatt", "range"};
 
 It is important that this name matches two things: the name of the sent Mavlink message AND the position in the msg_vector of the same sensor in the Simulink initialization tab. 
-
-Installation
-============
-The latest Mavlink headers are supplied as git a submodule. To generate headers from the submodule, from the console:
-
-    mkdir build && cd build
-    cmake ..
-    make
-
-The block uses boost libraries for UDP communication and multi-threading. To compile the source code for the S-Function block, you will need to use the provided boost libraries with your MATLAB distribution. To do that a matlab script is provided, just run:
-
-    >> autocompile
-
-on the root folder mav2simulink. Another option is to just call the default boost libraries from the system and use the udp_library generated in the "make" command above:
-
-    >> mex -Iinclude -lboost_thread -lboost_system -Lbuild -ludp_mavlink mav2simulink.cpp
-
-This gave me problems when linking with the mex-compiled wrapper, since the versions linux and MATLAB libstdc++ are incompatible. 
 

@@ -20,4 +20,4 @@ compile_str = ['mex -g -Iinclude ', boost_system, boost_threads, sources];
 clc
 fprintf('\n============ COMPILATON STARTING ============\n');
 eval( compile_str )
-fprintf('============ COMPILATON ENDED    ============\n');
+  fprintf('============ COMPILATON ENDED    ============\n');

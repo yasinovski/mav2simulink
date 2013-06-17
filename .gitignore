@@ -38,3 +38,5 @@ slprj/
 # Build files
 build/
 
+# Mavlink autogen
+#include/mavlink/
