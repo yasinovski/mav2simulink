@@ -15,6 +15,8 @@ So you should send one of the above if you intend to have the messages available
 Installation
 ============
 
+If you are on Windows 7 - 64 bits, precomipled binaries are supplied as well as the Visual Studio 2010 project files to compile the library easily. 
+
 Mavlink headers are needed for the compilation of the block. A stripped-down version is included, however, if the latest messages wished to be used, a subgit is provided. If you want to use these latest headers you need to generate them. To do so, from the console:
 
     git submodule init
@@ -23,7 +25,7 @@ Mavlink headers are needed for the compilation of the block. A stripped-down ver
     cmake ..
     make
 
-The block uses boost libraries for UDP communication and multi-threading. To compile the source code for the S-Function block, you will need to use the provided boost libraries with your MATLAB distribution. To do that a matlab script is provided, just run:
+The block uses boost libraries for UDP communication and multi-threading. To compile the S-Function block in Linux, you will need to use the provided boost libraries with your MATLAB distribution. To do that a matlab script is provided, just run:
 
     >> autocompile
 
